@@ -2,8 +2,8 @@ Changelog
 =========
 
 
-1.1 (2018-09-17)
-----------------
+1.0.dev1 (unreleased)
+---------------------
 
-- First public release.
+- Initial release.
   [tobiasherp]

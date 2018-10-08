@@ -121,3 +121,4 @@ pip-selfcheck.json
 scripts/
 .svn/
 update-module
+VERSION_SUFFIX

@@ -102,3 +102,22 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+#
+# virtualenv, setuptools
+bin
+Scripts
+build
+dist
+include
+lib
+lib64
+*.egg-info
+
+# visaplan, misc.
+auto.msg
+*~
+pip-selfcheck.json
+# ... Subversion tools:
+scripts/
+.svn/
+update-module

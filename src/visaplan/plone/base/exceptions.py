@@ -22,6 +22,18 @@ eine Fehlernachricht;
 um dies zu übersteuern, kann ein benanntes Argument messageType übergeben werden.
 """
 
+__all__ = [# UnitraccBaseException und abgeleitet:
+           'UnitraccBaseException',
+           'UidNotfoundException',
+           'OutdatedFileError',
+           'MissingFileError',
+           # (noch) nicht von UnitraccBaseException abgeleitet;
+           ## aus Products.unitracc@@password:
+           'InvalidPassword',
+           'EmptyPassword',
+           'PasswordTooShort',
+           ]
+
 
 class UnitraccBaseException(Exception):  # ------------- [ U.B.E. .. [
     """
@@ -41,7 +53,7 @@ class UnitraccBaseException(Exception):  # ------------- [ U.B.E. .. [
         - als Attribut _flat_mapping (ein flaches Dict incl. der **kwargs,
           z. B. zum Erzeugen einer Message mit dem message-Adapter
         - als Attribut _raw_mapping, das die Argumente gemäß der
-          Klassendefinition organisiert 
+          Klassendefinition organisiert
         """
         self._argspec = argspec = getargspec(type(self).__init__)
         # flaches Dict, incl. "Auflösung" der **kwargs:
@@ -124,6 +136,47 @@ class UidNotfoundException(UnitraccBaseException):
     mask_format = 'Object ${uid} not found!'
     def __init__(self, uid):
         UnitraccBaseException.__init__(self, uid)
+
+
+class OutdatedFileError(UnitraccBaseException):
+    "File '%(filename)s' is outdated"
+
+    mask_format = 'File "${filename}" is outdated'
+    def __init__(self, filename):
+        UnitraccBaseException.__init__(self, filename)
+
+
+class MissingFileError(UnitraccBaseException):
+    "File '%(filename)s' is missing"
+
+    mask_format = 'File "${filename}" is missing'
+    def __init__(self, filename):
+        UnitraccBaseException.__init__(self, filename)
+
+
+# ---------------------------- [ aus Products.unitracc@@password ... [
+class InvalidPassword(ValueError):
+    def mkmsg(self, translate, **kwargs):
+        self.msg = translate(self.msgmask) % kwargs
+
+    def __str__(self):
+        return self.msg
+
+    def __init__(self, translate):
+        self.mkmsg(translate)
+
+
+class EmptyPassword(InvalidPassword):
+    msgmask = 'Empty password is not allowed.'
+
+
+class PasswordTooShort(InvalidPassword):
+    msgmask = 'Password is too short; at least %(minlength)r characters required.'
+
+    def __init__(self, translate, minlength):
+        self.minlength = minlength
+        self.mkmsg(translate, minlength=minlength)
+# ---------------------------- ] ... aus Products.unitracc@@password ]
 
 
 if __name__ == '__main__':

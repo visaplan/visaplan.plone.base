@@ -3,7 +3,7 @@ from Products.Five import BrowserView as BaseBrowserView
 from zope.interface import implements, Interface
 from Products.CMFCore.utils import getToolByName
 
-from .mixin import GetContextMixin
+from .unbound import getContext
 
 class BrowserView(BaseBrowserView):
 
@@ -15,4 +15,4 @@ class BrowserView(BaseBrowserView):
         value = fti.defaultView(context)
         return getattr(context, value)()
 
-BrowserView.getContext = GetContextMixin.getContext
+BrowserView.getContext = getContext
